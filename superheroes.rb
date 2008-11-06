@@ -9,6 +9,10 @@ module SuperHeroes
       Assembler.new(target, @@vault[target], &powers).evaluate!
     end
 
+    def possible_abilities_for(target)
+      @@vault[target].keys
+    end
+
     def evaluate_ability(object, ability)
       if @@vault[object.class] and @@vault[object.class][ability]
         object.instance_eval(&@@vault[object.class][ability])
