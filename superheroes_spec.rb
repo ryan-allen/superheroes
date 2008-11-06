@@ -18,11 +18,11 @@ end
 
 SuperHeroes.pretending_to_be_a User do
 
-  can :do_police_things do
+  can :enforce_the_rule_of_law do
     police? or demigod?
   end
 
-  can :do_demigod_things do
+  can :move_mountains do
     demigod?
   end
 
@@ -31,37 +31,37 @@ end
 describe SuperHeroes do
   
   before do
-    @user = User.new(false, false)
-    @police = User.new(true, false)
+    @citizen = User.new(false, false)
+    @policeman = User.new(true, false)
     @demigod = User.new(false, true)
   end
 
-  it 'says user cannot do police things' do
-    @user.can?(:do_police_things).should == false
+  it 'says user cannot enforce the rule of law' do
+    @citizen.can?(:enforce_the_rule_of_law).should == false
   end
 
-  it 'says user cannot do demigod things' do
-    @user.can?(:do_demigod_things).should == false
+  it 'says user cannot move mountains' do
+    @citizen.can?(:move_mountains).should == false
   end
 
-  it 'says police can do police things' do
-    @police.can?(:do_police_things).should == true 
+  it 'says policeman can enforce the rule of law' do
+    @policeman.can?(:enforce_the_rule_of_law).should == true 
   end
 
-  it 'says police cannot do demigod things' do
-    @police.can?(:do_demigod_things).should == false
+  it 'says policeman cannot move mountains' do
+    @policeman.can?(:move_mountains).should == false
   end
   
-  it 'says demigod can do police things' do
-    @demigod.can?(:do_police_things).should == true
+  it 'says demigods can enforce the rule of law' do
+    @demigod.can?(:enforce_the_rule_of_law).should == true
   end
   
-  it 'says demigod can to demigod things' do
-    @demigod.can?(:do_demigod_things).should == true
+  it 'says demigods can move mountains' do
+    @demigod.can?(:move_mountains).should == true
   end
 
-  it 'raises exception when unknown ability is asked for' do
-    lambda { @user.can?(:do_backflips) }.should raise_error(SuperHeroes::UnknownAbility)
+  it 'raises exception when unknown ability is asked about' do
+    lambda { @citizen.can?(:do_backflips) }.should raise_error(SuperHeroes::UnknownAbility)
   end
   
 end
