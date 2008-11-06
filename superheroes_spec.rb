@@ -91,4 +91,6 @@ describe SuperHeroes do
     SuperHeroes.respond_to?(:pretending_to_be_an).should == true
   end
 
+  it 'could have syntatic sugar, i.e. @user.can.partay?, @user.can.drink?(@beer), @user.can?(:edit_thing).with(@thing)... this may be going too far :)'
+
 end
