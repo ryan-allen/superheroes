@@ -87,4 +87,8 @@ describe SuperHeroes do
     SuperHeroes.possible_abilities_for(User).should include(:get_into_a_lightning_fight)
   end
 
+  it 'believes grammar is liek supar important lol' do
+    SuperHeroes.respond_to?(:pretending_to_be_an).should == true
+  end
+
 end

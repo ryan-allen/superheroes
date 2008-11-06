@@ -11,6 +11,8 @@ module SuperHeroes
       Assembler.new(target, @@vault[target], &powers).evaluate!
     end
 
+    alias :pretending_to_be_an :pretending_to_be_a # grammar is important!
+
     def possible_abilities_for(target)
       @@vault[target].keys
     end
