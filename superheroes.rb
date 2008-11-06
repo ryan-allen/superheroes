@@ -1,3 +1,5 @@
+require "#{File.dirname(__FILE__)}/3rd-party/eigenclass_instance_exec"
+
 module SuperHeroes
 
   class << self
@@ -13,9 +15,9 @@ module SuperHeroes
       @@vault[target].keys
     end
 
-    def evaluate_ability(object, ability)
+    def evaluate_ability(object, ability, *extra)
       if @@vault[object.class] and @@vault[object.class][ability]
-        object.instance_eval(&@@vault[object.class][ability])
+        object.instance_exec(*extra, &@@vault[object.class][ability])
       else
         raise UnknownAbility.new("no ability #{ability.inspect} found for #{object.class.inspect}")
       end
@@ -32,8 +34,8 @@ private
     def initialize(target, vault, &powers)
       @target, @vault, @powers = target, vault, powers
       @target.class_eval do
-        def can?(ability)
-          SuperHeroes.evaluate_ability(self, ability)
+        def can?(ability, *extra)
+          SuperHeroes.evaluate_ability(self, ability, *extra)
         end
       end
     end

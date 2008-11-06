@@ -26,6 +26,10 @@ SuperHeroes.pretending_to_be_a User do
     demigod?
   end
 
+  can :get_into_a_lightning_fight do |other_user|
+    demigod? and other_user.demigod? and self != other_user
+  end
+
 end
 
 describe SuperHeroes do
@@ -34,6 +38,7 @@ describe SuperHeroes do
     @citizen = User.new(false, false)
     @policeman = User.new(true, false)
     @demigod = User.new(false, true)
+    @another_demigod = User.new(false, true)
   end
 
   it 'says user cannot enforce the rule of law' do
@@ -60,12 +65,26 @@ describe SuperHeroes do
     @demigod.can?(:move_mountains).should == true
   end
 
+  it 'says citizen cannot fight a demigod with lightning' do
+    @citizen.can?(:get_into_a_lightning_fight, @demigod).should == false 
+  end
+
+  it 'says demigod can fight another demigod with lightning' do
+    @demigod.can?(:get_into_a_lightning_fight, @another_demigod).should == true
+  end
+
+  it 'says demigod cannot fight themselves with lightning' do
+    @demigod.can?(:get_into_a_lightning_fight, @demigod).should == false
+  end
+
   it 'raises exception when unknown ability is asked about' do
     lambda { @citizen.can?(:do_backflips) }.should raise_error(SuperHeroes::UnknownAbility)
   end
 
   it 'can reflect possible abilities for a user' do
-    SuperHeroes.possible_abilities_for(User).should == [:enforce_the_rule_of_law, :move_mountains]
+    SuperHeroes.possible_abilities_for(User).should include(:enforce_the_rule_of_law)
+    SuperHeroes.possible_abilities_for(User).should include(:move_mountains)
+    SuperHeroes.possible_abilities_for(User).should include(:get_into_a_lightning_fight)
   end
-  
+
 end
