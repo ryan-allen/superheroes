@@ -1,44 +1,13 @@
-require 'superheroes'
-
-class User
-
-  def initialize(police = false, demigod = false)
-    @police, @demigod = police, demigod
-  end
-
-  def police?
-    @police
-  end
-
-  def demigod?
-    @demigod
-  end
-
-end
-
-SuperHeroes.pretending_to_be_a User do
-
-  can :enforce_the_rule_of_law do
-    police? or demigod?
-  end
-
-  can :move_mountains do
-    demigod?
-  end
-
-  can :get_into_a_lightning_fight do |other_user|
-    demigod? and other_user.demigod? and self != other_user
-  end
-
-end
+require "#{File.dirname(__FILE__)}/../superheroes"
+require "#{File.dirname(__FILE__)}/fixtures"
 
 describe SuperHeroes do
   
   before do
-    @citizen = User.new(false, false)
-    @policeman = User.new(true, false)
-    @demigod = User.new(false, true)
-    @another_demigod = User.new(false, true)
+    @citizen = User.make_citizen
+    @policeman = User.make_policeman
+    @demigod = User.make_demigod
+    @another_demigod = User.make_demigod
   end
 
   it 'says user cannot enforce the rule of law' do
