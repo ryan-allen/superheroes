@@ -35,9 +35,9 @@ module SuperHeroes
         filter_name = "check_#{@subject}_#{@op}_#{ability}".to_sym
         subject, op, options, target = @subject, @op, @options, @target
         @controller.class_eval do
-          before_filter filter_name, *options
+          before_filter filter_name, *[options]
           define_method filter_name do
-            cannot_perform_ability(assigns(subject), ability, target) unless assigns(subject).send(op).send(ability, *[target])
+            cannot_perform_ability(assigns(subject), ability, assigns(target)) unless assigns(subject).send(op).send(ability, *[assigns(target)])
           end
         end
       end
