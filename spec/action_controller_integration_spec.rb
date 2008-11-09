@@ -32,6 +32,12 @@ describe SuperHeroes::ActionControllerIntegration do
       @instance.respond_to?(:check_user_can_enforce_the_rule_of_law).should == true
     end
 
+    it 'creates a before_filter on the class with the generated method'
+    it 'does nothing if the filter is successful'
+    it 'calls cannot_perform_ability if the filter is unsuccessful'
+
   end
+
+  it 'handles method_mising more proper, i.e. look into abilities then re-raise if there is a miss'
 
 end

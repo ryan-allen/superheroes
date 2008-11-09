@@ -16,7 +16,7 @@ module SuperHeroes
 
     class FilterGenerator 
 
-      def initialize(controller, target_assign)
+      def initialize(controller, subject)
         @controller, @subject, @target, @options = controller, subject, nil, {}
       end
 
@@ -43,7 +43,7 @@ module SuperHeroes
 
     private
 
-      def parse_extra(*extra)
+      def parse_extra_into_target_and_options(*extra)
         if extra.any?
           if extra.length == 1
             if extra.first.is_a?(Hash)
