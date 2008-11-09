@@ -1,1 +1,7 @@
-OK, it's not a secret anymore. I'll explain why soon.
+Throw out those 17 tables worth of role-based plugins! Nobody needs to build those forms and junk with field based access! We don't need an admin UI to edit roles and permissions! We'll do it all in Ruby, thanks.
+
+Here's a small library (it's much smaller without ActionController integration) that allows you to declerlavlatively define abilities of entities in your domain model, evaluated on damn well almost any kind of code you can dream up. It's prety easy, have a look:
+
+http://gist.github.com/23222
+
+And well, yeah. No more exciting documentation 'till I've hit my head against the wall trying to integrate this with our production app. Enjoy!
