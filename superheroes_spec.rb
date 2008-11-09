@@ -91,6 +91,28 @@ describe SuperHeroes do
     SuperHeroes.respond_to?(:pretending_to_be_an).should == true
   end
 
-  it 'could have syntatic sugar, i.e. @user.can.partay?, @user.can.drink?(@beer), @user.can?(:edit_thing).with(@thing)... this may be going too far :)'
+  it 'has a cannot method that returns the opposite of can (without targets)' do
+    @citizen.cannot?(:enforce_the_rule_of_law).should == true
+  end
+
+  it 'has a cannot method that returns the opposite of can (with targets)' do
+    @citizen.cannot?(:get_into_a_lightning_fight, @demigod).should == true
+  end
+
+  it 'supports higher order syntax without targets' do
+    @citizen.can.enforce_the_rule_of_law?.should == false
+  end
+
+  it 'supports higher order syntax without targets' do
+    @demigod.can.get_into_a_lightning_fight?(@another_demigod).should == true 
+  end
+
+  it 'does higher order cannot without targets' do
+    @citizen.cannot.enforce_the_rule_of_law?.should == true 
+  end
+
+  it 'does higher order cannot with targets' do
+    @demigod.cannot.get_into_a_lightning_fight?(@another_demigod).should == false 
+  end
 
 end

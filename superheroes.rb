@@ -30,6 +30,19 @@ module SuperHeroes
 private
 
   class UnknownAbility < RuntimeError; end
+
+  class HigherOrderProxy
+
+    def initialize(object, invert = false)
+      @object, @invert = object, invert
+    end
+
+    def method_missing(ability, *extra)
+      evaluation = SuperHeroes.evaluate_ability(@object, ability.to_s[0..-2].to_sym, *extra)
+      @invert ? !evaluation : evaluation
+    end
+
+  end
   
   class Assembler
 
@@ -38,6 +51,18 @@ private
       @target.class_eval do
         def can?(ability, *extra)
           SuperHeroes.evaluate_ability(self, ability, *extra)
+        end
+
+        def cannot?(ability, *extra)
+          !SuperHeroes.evaluate_ability(self, ability, *extra)
+        end
+
+        def can
+          HigherOrderProxy.new(self) 
+        end
+
+        def cannot
+          HigherOrderProxy.new(self, true)
         end
       end
     end
