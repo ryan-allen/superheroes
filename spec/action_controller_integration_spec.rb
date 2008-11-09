@@ -96,8 +96,15 @@ describe SuperHeroes::ActionControllerIntegration do
     end
 
   end
+ 
+  describe 'a check that requires a target and passes in filter opts' do
 
-  describe 'a check that requires a target and passes in filter opts'
+    it 'passes through the filter options' do
+      @class.should_receive(:before_filter).with(:check_user_can_get_into_a_lightning_fight?, {:only => :fight!})
+      add_check { check(:user).can.get_into_a_lightning_fight?(:another_user, :only => :fight!) }
+    end
+
+  end
 
   it 'handles method_mising more proper, i.e. look into abilities then re-raise if there is a miss' # same issue with workflow right here, so there is a pattern!
 
