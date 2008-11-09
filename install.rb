@@ -31,5 +31,6 @@ if ENV['RAILS_ENV'] == 'development'
   end
 end
     ruby
+  end
   puts "done!"
 end
