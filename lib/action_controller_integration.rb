@@ -33,10 +33,11 @@ module SuperHeroes
       def method_missing(ability, *extra)
         parse_extra_into_target_and_options(*extra)
         filter_name = "check_#{@subject}_#{@op}_#{ability}".to_sym
+        subject, op, options, target = @subject, @op, @options, @target
         @controller.class_eval do
-          before_filter filter_name, @options
+          before_filter filter_name, *options
           define_method filter_name do
-            cannot_perform_ability(assigns(@subject), ability) unless assigns(@subject).send(@op).send(ability, *[@target])
+            cannot_perform_ability(assigns(subject), ability, target) unless assigns(subject).send(op).send(ability, *[target])
           end
         end
       end

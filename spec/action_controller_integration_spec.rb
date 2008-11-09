@@ -12,7 +12,12 @@ describe SuperHeroes::ActionControllerIntegration do
     @class = Class.new
     @class.class_eval do
       include SuperHeroes::ActionControllerIntegration
+      def self.before_filter(*args); end
     end
+  end
+
+  def add_check(&check)
+    @class.class_eval(&check)
   end
 
   it 'binds check as a class method when included' do
@@ -22,19 +27,30 @@ describe SuperHeroes::ActionControllerIntegration do
   describe 'a simple check on a subject' do
 
     setup do
-      @class.class_eval do
-        check(:user).can.enforce_the_rule_of_law
-      end
+      add_check { check(:user).can.enforce_the_rule_of_law? }
+      @instance = @class.new
     end
 
     it 'sets up a before filter instance method based on the check' do
-      @instance = @class.new
-      @instance.respond_to?(:check_user_can_enforce_the_rule_of_law).should == true
+      @instance.respond_to?(:check_user_can_enforce_the_rule_of_law?).should == true
     end
 
-    it 'creates a before_filter on the class with the generated method'
-    it 'does nothing if the filter is successful'
-    it 'calls cannot_perform_ability if the filter is unsuccessful'
+    it 'creates a before_filter on the class with the generated method' do
+      @class.should_receive(:before_filter).with(:check_user_can_enforce_the_rule_of_law?)
+      add_check { check(:user).can.enforce_the_rule_of_law? } # damn mocks
+    end
+
+    it 'does nothing if the filter is successful' do
+      @instance.should_receive(:assigns).any_number_of_times.with(:user).and_return(@policeman)
+      @instance.should_not_receive(:cannot_perform_ability)
+      @instance.check_user_can_enforce_the_rule_of_law?
+    end
+
+    it 'calls cannot_perform_ability if the filter is unsuccessful' do
+      @instance.should_receive(:assigns).any_number_of_times.with(:user).and_return(@citizen)
+      @instance.should_receive(:cannot_perform_ability).with(@citizen, :enforce_the_rule_of_law?, nil)
+      @instance.check_user_can_enforce_the_rule_of_law?
+    end
 
   end
 
