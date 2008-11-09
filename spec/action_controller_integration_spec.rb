@@ -106,6 +106,7 @@ describe SuperHeroes::ActionControllerIntegration do
 
   end
 
+  it 'accepts a block to perform in scope of the controller instance on failure'
   it 'handles method_mising more proper, i.e. look into abilities then re-raise if there is a miss' # same issue with workflow right here, so there is a pattern!
 
 end
