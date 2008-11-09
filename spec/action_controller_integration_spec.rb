@@ -13,7 +13,7 @@ describe SuperHeroes::ActionControllerIntegration do
     @class.class_eval do
       include SuperHeroes::ActionControllerIntegration
       def self.before_filter(*args); end
-      def assigns(*args); end
+      def instance_variable_get(*args); end
     end
   end
 
@@ -30,7 +30,7 @@ describe SuperHeroes::ActionControllerIntegration do
     setup do
       add_check { check(:user).can.enforce_the_rule_of_law? }
       @instance = @class.new
-      @instance.stub!(:assigns).with(nil).and_return(nil)
+      @instance.stub!(:instance_variable_get).with("@").and_return(nil)
     end
 
     it 'sets up a before filter instance method based on the check' do
@@ -43,13 +43,13 @@ describe SuperHeroes::ActionControllerIntegration do
     end
 
     it 'does nothing if the filter is successful' do
-      @instance.should_receive(:assigns).any_number_of_times.with(:user).and_return(@policeman)
+      @instance.should_receive(:instance_variable_get).any_number_of_times.with('@user').and_return(@policeman)
       @instance.should_not_receive(:cannot_perform_ability)
       @instance.check_user_can_enforce_the_rule_of_law?
     end
 
     it 'calls cannot_perform_ability if the filter is unsuccessful' do
-      @instance.should_receive(:assigns).any_number_of_times.with(:user).and_return(@citizen)
+      @instance.should_receive(:instance_variable_get).any_number_of_times.with('@user').and_return(@citizen)
       @instance.should_receive(:cannot_perform_ability).with(@citizen, :enforce_the_rule_of_law?, nil)
       @instance.check_user_can_enforce_the_rule_of_law?
     end
@@ -73,15 +73,15 @@ describe SuperHeroes::ActionControllerIntegration do
     end
 
     it 'does nothing if the filter is successful' do
-      @instance.should_receive(:assigns).any_number_of_times.with(:user).and_return(@demigod)
-      @instance.should_receive(:assigns).any_number_of_times.with(:another_user).and_return(@another_demigod)
+      @instance.should_receive(:instance_variable_get).any_number_of_times.with('@user').and_return(@demigod)
+      @instance.should_receive(:instance_variable_get).any_number_of_times.with('@another_user').and_return(@another_demigod)
       @instance.should_not_receive(:cannot_perform_ability)
       @instance.check_user_can_get_into_a_lightning_fight?
     end
 
     it 'calls cannot_perform_ability if the filter is unsuccessful' do
-      @instance.should_receive(:assigns).any_number_of_times.with(:user).and_return(@demigod)
-      @instance.should_receive(:assigns).any_number_of_times.with(:another_user).and_return(@demigod)
+      @instance.should_receive(:instance_variable_get).any_number_of_times.with('@user').and_return(@demigod)
+      @instance.should_receive(:instance_variable_get).any_number_of_times.with('@another_user').and_return(@demigod)
       @instance.should_receive(:cannot_perform_ability).with(@demigod, :get_into_a_lightning_fight?, @demigod)
       @instance.check_user_can_get_into_a_lightning_fight?
     end

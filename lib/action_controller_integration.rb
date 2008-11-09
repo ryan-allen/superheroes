@@ -37,7 +37,7 @@ module SuperHeroes
         @controller.class_eval do
           before_filter filter_name, *[options]
           define_method filter_name do
-            cannot_perform_ability(assigns(subject), ability, assigns(target)) unless assigns(subject).send(op).send(ability, *[assigns(target)])
+            cannot_perform_ability(instance_variable_get("@#{subject}"), ability, instance_variable_get("@#{target}")) unless instance_variable_get("@#{subject}").send(op).send(ability, *[instance_variable_get("@#{target}")])
           end
         end
       end
